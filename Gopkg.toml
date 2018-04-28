@@ -1,0 +1,64 @@
+
+# Gopkg.toml example
+#
+# Refer to https://github.com/golang/dep/blob/master/docs/Gopkg.toml.md
+# for detailed Gopkg.toml documentation.
+#
+# required = ["github.com/user/thing/cmd/thing"]
+# ignored = ["github.com/user/project/pkgX", "bitbucket.org/user/project/pkgA/pkgY"]
+#
+# [[constraint]]
+#   name = "github.com/user/project"
+#   version = "1.0.0"
+#
+# [[constraint]]
+#   name = "github.com/user/project2"
+#   branch = "dev"
+#   source = "github.com/myfork/project2"
+#
+# [[override]]
+#  name = "github.com/x/y"
+#  version = "2.4.0"
+
+
+[[constraint]]
+  name = "github.com/jinzhu/gorm"
+  version = "1.0.0"
+
+[[constraint]]
+  name = "github.com/go-kit/kit"
+  revision = "9ed37433947b357910facd0e38a8ec110fda62c1"
+
+[[constraint]]
+  name = "github.com/grpc-ecosystem/grpc-gateway"
+  version = "1.2.2"
+
+[[constraint]]
+  name = "google.golang.org/grpc"
+  version = "~1.4.2"
+
+[[constraint]]
+  name = "github.com/gorilla/mux"
+  version = "~1.4.0"
+
+[[constraint]]
+  name = "github.com/golang/protobuf"
+
+[[constraint]]
+  name = "golang.org/x/net"
+
+[[constraint]]
+  name = "github.com/gorilla/handlers"
+  version = "1.2.1"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/auth0/go-jwt-middleware"
+
+[[constraint]]
+  branch = "master"
+  name = "golang.org/x/crypto"
+
+[[constraint]]
+  name = "github.com/asaskevich/govalidator"
+  version = "7.0.0"

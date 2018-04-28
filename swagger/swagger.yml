@@ -1,0 +1,1536 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Headless CMS
+host: 127.0.0.1:8080
+basePath: /api
+tags:
+- name: account
+  description: "Operations about account"
+- name: role
+  description: "Operations about user roles"
+- name: user
+  description: "Operations about users"
+- name: project
+  description: "Operations about projects"
+- name: item-type
+  description: "Operations about item types"
+- name: field
+  description: "Operations about item-type fields"
+
+schemes:
+  - http
+
+consumes:
+  - application/json
+
+produces:
+  - application/json
+
+paths:
+
+#---------
+# Accounts
+#---------
+
+  # Register
+
+  /signup:
+
+    post:
+      tags:
+      - account
+      operationId: signup
+      parameters:
+      - name: body
+        in: body
+        description: The account details
+        required: true
+        schema:
+          required:
+          - data
+          properties:
+            data:
+              $ref: '#/definitions/EmailCredentials'
+      responses:
+        201:
+          description: Created
+          schema:
+            properties:
+              data:
+                $ref: '#/definitions/Session'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  # Login
+
+  /signin:
+
+    post:
+      tags:
+      - account
+      operationId: signin
+      parameters:
+      - name: body
+        in: body
+        description: The account details
+        required: true
+        schema:
+          required:
+          - data
+          properties:
+            data:
+              $ref: '#/definitions/EmailCredentials'
+      responses:
+        200:
+          description: Created
+          schema:
+            properties:
+              data:
+                $ref: '#/definitions/Session'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+#---------
+# Projects
+#---------
+
+  /projects:
+
+    # Create
+
+    post:
+      tags:
+      - project
+      operationId: createProject
+      summary: "Create a project"
+      parameters:
+      - name: body
+        in: body
+        description: "The project details"
+        required: true
+        schema:
+          $ref: '#/definitions/ProjectRequest'
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: '#/definitions/ProjectResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Get List
+
+    get:
+      tags:
+      - project
+      operationId: getProjects
+      summary: "Get the projects for the user"
+      responses:
+        200:
+          description: "The project list"
+          schema:
+            $ref: '#/definitions/ProjectsResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+  /projects/{id}:
+    parameters:
+    - name: id
+      type: string
+      in: path
+      description: "The project id"
+      required: true
+      x-nullable: false
+
+    # Get
+
+    get:
+      tags:
+      - project
+      operationId: getProject
+      summary: "Get a project"
+      responses:
+        200:
+          description: "The project details"
+          schema:
+            $ref: '#/definitions/ProjectResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Update
+
+    put:
+      tags:
+      - project
+      operationId: updateProject
+      summary: "Update a project"
+      parameters:
+      - name: body
+        in: body
+        description: "The project details"
+        schema:
+          $ref: '#/definitions/ProjectRequest'
+      responses:
+        200:
+          description: "The project details"
+          schema:
+            $ref: '#/definitions/ProjectResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Delete
+
+    delete:
+      tags:
+      - project
+      operationId: deleteProject
+      summary: "Delete a project"
+      responses:
+        200:
+          description: "The project details"
+          schema:
+            $ref: '#/definitions/ProjectResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+#-------
+# Roles
+#-------
+
+  /projects/{projectId}/roles:
+    parameters:
+    - name: projectId
+      type: string
+      in: path
+      description: "The project id"
+      required: true
+      x-nullable: false
+
+    # Create
+
+    post:
+      tags:
+      - role
+      operationId: createRole
+      summary: "Create a new role"
+      parameters:
+      - name: body
+        in: body
+        description: "The role details"
+        required: true
+        schema:
+          $ref: '#/definitions/RoleRequest'
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: '#/definitions/RoleResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Get list
+
+    get:
+      tags:
+      - role
+      operationId: getRoles
+      summary: "Get the roles of the model"
+      responses:
+        200:
+          description: "Created"
+          schema:
+            $ref: '#/definitions/RolesResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+  /projects/{projectId}/roles/{id}:
+    parameters:
+    - name: projectId
+      type: string
+      in: path
+      description: "The project id"
+      required: true
+      x-nullable: false
+    - name: id
+      type: string
+      in: path
+      description: "The role id"
+      required: true
+      x-nullable: false
+
+    # Get
+
+    get:
+      tags:
+      - role
+      operationId: getRole
+      summary: "Get a role"
+      responses:
+        200:
+          description: "The role details"
+          schema:
+            $ref: '#/definitions/RoleResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Update
+
+    put:
+      tags:
+      - role
+      operationId: updateRole
+      summary: "Update a role"
+      parameters:
+      - name: body
+        in: body
+        description: "The role details"
+        schema:
+          $ref: '#/definitions/RoleRequest'
+      responses:
+        200:
+          description: "The role details"
+          schema:
+            $ref: '#/definitions/RoleResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Delete
+
+    delete:
+      tags:
+      - role
+      operationId: deleteRole
+      summary: "Delete a role"
+      responses:
+        200:
+          description: "The role details"
+          schema:
+            $ref: '#/definitions/RoleResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+#-------
+# Users
+#-------
+
+  /projects/{projectId}/users:
+    parameters:
+    - name: projectId
+      type: string
+      in: path
+      description: "The project id"
+      required: true
+      x-nullable: false
+
+    # Create
+
+    post:
+      tags:
+      - user
+      operationId: createUser
+      summary: "Create a new user"
+      parameters:
+      - name: body
+        in: body
+        description: "The user details"
+        required: true
+        schema:
+          $ref: '#/definitions/UserRequest'
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: '#/definitions/UserResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Get list
+
+    get:
+      tags:
+      - user
+      operationId: getUsers
+      summary: "Get the users of the model"
+      responses:
+        200:
+          description: "Created"
+          schema:
+            $ref: '#/definitions/UsersResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+  /projects/{projectId}/users/{id}:
+    parameters:
+    - name: projectId
+      type: string
+      in: path
+      description: "The project id"
+      required: true
+      x-nullable: false
+    - name: id
+      type: string
+      in: path
+      description: "The user id"
+      required: true
+      x-nullable: false
+
+    # Get
+
+    get:
+      tags:
+      - user
+      operationId: getUser
+      summary: "Get a user"
+      responses:
+        200:
+          description: "The user details"
+          schema:
+            $ref: '#/definitions/UserResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Update
+
+    put:
+      tags:
+      - user
+      operationId: updateUser
+      summary: "Update a user"
+      parameters:
+      - name: body
+        in: body
+        description: "The user details"
+        schema:
+          $ref: '#/definitions/UserRequest'
+      responses:
+        200:
+          description: "The user details"
+          schema:
+            $ref: '#/definitions/UserResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Delete
+
+    delete:
+      tags:
+      - user
+      operationId: deleteUser
+      summary: "Delete a user"
+      responses:
+        200:
+          description: "The user details"
+          schema:
+            $ref: '#/definitions/UserResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+#-----------
+# Item-Types
+#-----------
+
+  /projects/{projectId}/item-types:
+    parameters:
+    - name: projectId
+      type: string
+      in: path
+      description: "The project id"
+      required: true
+      x-nullable: false
+
+    # Create
+
+    post:
+      tags:
+      - item-type
+      operationId: createItemType
+      summary: "Create a model"
+      parameters:
+      - name: body
+        in: body
+        description: "The model details"
+        required: true
+        schema:
+          $ref: '#/definitions/ItemTypeRequest'
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: '#/definitions/ItemTypeResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Get List
+
+    get:
+      tags:
+      - item-type
+      operationId: getItemTypes
+      summary: "Get the item types for the project"
+      responses:
+        200:
+          description: "The item type list"
+          schema:
+            $ref: '#/definitions/ItemTypesResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+  /projects/{projectId}/item-types/{id}:
+    parameters:
+    - name: projectId
+      type: string
+      in: path
+      description: "The project id"
+      required: true
+      x-nullable: false
+    - name: id
+      type: string
+      in: path
+      description: "The model id"
+      required: true
+      x-nullable: false
+
+    # Get
+
+    get:
+      tags:
+      - item-type
+      operationId: getItemType
+      summary: "Get a model"
+      responses:
+        200:
+          description: "The model details"
+          schema:
+            $ref: '#/definitions/ItemTypeResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Update
+
+    put:
+      tags:
+      - item-type
+      operationId: updateItemType
+      summary: "Update a model"
+      parameters:
+      - name: body
+        in: body
+        description: "The model details"
+        schema:
+          $ref: '#/definitions/ItemTypeRequest'
+      responses:
+        200:
+          description: "The model details"
+          schema:
+            $ref: '#/definitions/ItemTypeResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Delete
+
+    delete:
+      tags:
+      - item-type
+      operationId: deleteItemType
+      summary: "Delete a model"
+      responses:
+        200:
+          description: "The model details"
+          schema:
+            $ref: '#/definitions/ItemTypeResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+  # Duplicate
+
+  /projects/{projectId}/item-types/{id}/duplicate:
+    parameters:
+    - name: projectId
+      type: string
+      in: path
+      description: "The project id"
+      required: true
+      x-nullable: false
+    - name: id
+      type: string
+      in: path
+      description: "The model id"
+      required: true
+      x-nullable: false
+    post:
+      tags:
+      - item-type
+      operationId: duplicateItemType
+      summary: "Duplicate a model"
+      responses:
+        200:
+          description: "The model details"
+          schema:
+            $ref: '#/definitions/ItemTypeResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+#-------
+# Fields
+#-------
+
+  /projects/{projectId}/item-types/{itemTypeId}/fields:
+    parameters:
+    - name: projectId
+      type: string
+      in: path
+      description: "The project id"
+      required: true
+      x-nullable: false
+    - name: itemTypeId
+      type: string
+      in: path
+      description: "The item type id"
+      required: true
+      x-nullable: false
+
+    # Create
+
+    post:
+      tags:
+      - field
+      operationId: createField
+      summary: "Create a new field"
+      parameters:
+      - name: body
+        in: body
+        description: "The field details"
+        required: true
+        schema:
+          $ref: '#/definitions/FieldRequest'
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: '#/definitions/FieldResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Get list
+
+    get:
+      tags:
+      - field
+      operationId: getFields
+      summary: "Get the fields of the model"
+      responses:
+        200:
+          description: "Fields response"
+          schema:
+            $ref: '#/definitions/FieldsResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+  /projects/{projectId}/fields/{id}:
+    parameters:
+    - name: projectId
+      type: string
+      in: path
+      description: "The project id"
+      required: true
+      x-nullable: false
+    - name: id
+      type: string
+      in: path
+      description: "The field id"
+      required: true
+      x-nullable: false
+
+    # Get
+
+    get:
+      tags:
+      - field
+      operationId: getField
+      summary: "Get a field"
+      responses:
+        200:
+          description: "The field details"
+          schema:
+            $ref: '#/definitions/FieldResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Update
+
+    put:
+      tags:
+      - field
+      operationId: updateField
+      summary: "Update a field"
+      parameters:
+      - name: body
+        in: body
+        description: "The field details"
+        schema:
+          $ref: '#/definitions/FieldRequest'
+      responses:
+        200:
+          description: "The field details"
+          schema:
+            $ref: '#/definitions/FieldResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Delete
+
+    delete:
+      tags:
+      - field
+      operationId: deleteField
+      summary: "Delete a field"
+      responses:
+        200:
+          description: "The field details"
+          schema:
+            $ref: '#/definitions/FieldResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+  /projects/{projectId}/fields:
+    parameters:
+    - name: projectId
+      type: string
+      in: path
+      description: "The project id"
+      required: true
+      x-nullable: false
+    - name: ids
+      in: query
+      description: "IDs to include in the response"
+      type: array
+      items:
+        type: integer
+        format: int32
+        minimum: 1
+      x-nullable: false
+    - name: id
+      in: query
+      description: "ID of a related resource to include in the response. The resource must be specified in the target parameter"
+      type: integer
+      format: int32
+      x-nullable: false
+    - name: target
+      in: query
+      description: "Target resource of the query. Must include the id of the resource as well."
+      type: string
+      enum: [itemTypeId]
+      x-nullable: false
+
+    # Get field list
+
+    get:
+      tags:
+      - field
+      operationId: getProjectFields
+      summary: "Get all the fields of the project"
+      responses:
+        200:
+          description: "Fields response"
+          schema:
+            $ref: '#/definitions/FieldsResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+#------
+# Items
+#------
+
+  /projects/{projectId}/items:
+    parameters:
+    - name: projectId
+      type: string
+      in: path
+      description: "The project id"
+      required: true
+      x-nullable: false
+
+    # Create
+
+    post:
+      tags:
+      - item
+      operationId: createItem
+      summary: "Create a new item"
+      parameters:
+      - name: body
+        in: body
+        description: "The item details"
+        required: true
+        schema:
+          $ref: '#/definitions/ItemRequest'
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: '#/definitions/ItemResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Get list
+
+    get:
+      tags:
+      - item
+      operationId: getItems
+      summary: "Get the items of the model"
+      parameters:
+      - name: ids
+        in: query
+        description: "IDs to include in the response"
+        type: array
+        items:
+          type: integer
+          format: int32
+          minimum: 1
+      - name: type
+        in: query
+        description: "The item-type id of the items"
+        type: integer
+        format: int32
+        minimum: 1
+      - name: query
+        in: query
+        description: "The filter query"
+        type: string
+      - name: offset
+        in: query
+        description: "The page offset"
+        type: integer
+        format: int32
+        minimum: 0
+      - name: limit
+        in: query
+        description: "The limit count"
+        type: integer
+        format: int32
+        minimum: 0
+      responses:
+        200:
+          description: "Created"
+          schema:
+            $ref: '#/definitions/ItemsResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+  /projects/{projectId}/items/{id}:
+    parameters:
+    - name: projectId
+      type: string
+      in: path
+      description: "The project id"
+      required: true
+      x-nullable: false
+    - name: id
+      type: string
+      in: path
+      description: "The item id"
+      required: true
+      x-nullable: false
+
+    # Get
+
+    get:
+      tags:
+      - item
+      operationId: getItem
+      summary: "Get a item"
+      responses:
+        200:
+          description: "The item details"
+          schema:
+            $ref: '#/definitions/ItemResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Update
+
+    put:
+      tags:
+      - item
+      operationId: updateItem
+      summary: "Update a item"
+      parameters:
+      - name: body
+        in: body
+        description: "The item details"
+        schema:
+          $ref: '#/definitions/ItemRequest'
+      responses:
+        200:
+          description: "The item details"
+          schema:
+            $ref: '#/definitions/ItemResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+    # Delete
+
+    delete:
+      tags:
+      - item
+      operationId: deleteItem
+      summary: "Delete a item"
+      responses:
+        200:
+          description: "The item details"
+          schema:
+            $ref: '#/definitions/ItemResponse'
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+
+  #-------
+  # Models
+  #-------
+
+  # Relationship
+
+  Relationship:
+    type: object
+    required:
+    - id
+    - type
+    properties:
+      id:
+        type: string
+        x-nullable: false
+      type:
+        type: string
+        enum: [account, project, role, session, item_type, field, item]
+        x-nullable: false
+
+  # Account
+
+  EmailCredentials:
+    type: object
+    required:
+    - type
+    - attributes
+    properties:
+      type:
+        type: string
+        enum: [email_credentials]
+        x-nullable: false
+      attributes:
+        type: object
+        x-nullable: false
+        required:
+          - email
+          - password
+        properties:
+          email:
+            type: string
+            format: email
+            x-nullable: false
+          password:
+            type: string
+            format: password
+            minLength: 8
+            maxLength: 32
+            x-nullable: false
+
+  Session:
+    type: object
+    required:
+    - id
+    - type
+    - relationships
+    properties:
+      id:
+        type: string
+        x-nullable: false
+      type:
+        type: string
+        enum: [session]
+        x-nullable: false
+      relationships:
+        $ref: '#/definitions/SessionRelationships'
+
+  SessionRelationships:
+    type: object
+    properties:
+      user:
+        type: object
+        properties:
+          data:
+            $ref: '#/definitions/Relationship'
+
+  # Project
+
+  Project:
+    type: object
+    required:
+    - type
+    - attributes
+    properties:
+      id:
+        type: string
+        readOnly: true
+        x-nullable: false
+      type:
+        type: string
+        enum: [project]
+        x-nullable: false
+      attributes:
+        type: object
+        required:
+        - name
+        properties:
+          name:
+            type: string
+            x-nullable: false
+      relationships:
+        $ref: '#/definitions/ProjectRelationships'
+
+  ProjectRelationships:
+    type: object
+    properties:
+      account:
+        type: object
+        properties:
+          data:
+            $ref: '#/definitions/Relationship'
+
+  # Role
+
+  Role:
+    type: object
+    required:
+    - type
+    - attributes
+    properties:
+      id:
+        type: string
+        readOnly: true
+        x-nullable: false
+      type:
+        type: string
+        enum: [role]
+        x-nullable: false
+      attributes:
+        type: object
+        x-nullable: false
+        required:
+          - name
+        properties:
+          name:
+            type: string
+            x-nullable: false
+          canEditProject:
+            type: boolean
+            x-nullable: false
+          canEditSchema:
+            type: boolean
+            x-nullable: false
+          canPublishContent:
+            type: boolean
+            x-nullable: false
+          canManageUsers:
+            type: boolean
+            x-nullable: false
+          canManageAccessTokens:
+            type: boolean
+            x-nullable: false
+
+  # User
+
+  User:
+    type: object
+    required:
+    - type
+    - attributes
+    - relationships
+    properties:
+      id:
+        type: string
+        readOnly: true
+        x-nullable: false
+      type:
+        type: string
+        enum: [user]
+        x-nullable: false
+      attributes:
+        type: object
+        required:
+        - email
+        properties:
+          email:
+            type: string
+            format: email
+            x-nullable: false
+          state:
+            type: string
+            enum: [registered, invitation_pending]
+      relationships:
+        $ref: '#/definitions/UserRelationships'
+
+  UserRelationships:
+    type: object
+    required:
+    - role
+    properties:
+      role:
+        type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/definitions/Relationship'
+
+  # Item-Type
+
+  ItemType:
+    type: object
+    required:
+    - type
+    - attributes
+    properties:
+      id:
+        type: string
+        readOnly: true
+        x-nullable: false
+      type:
+        type: string
+        enum: [item_type]
+        x-nullable: false
+      attributes:
+        type: object
+        required:
+        - apiKey
+        properties:
+          name:
+            type: string
+            x-nullable: false
+          apiKey:
+            type: string
+            x-nullable: false
+            minLength: 1
+            maxLength: 32
+      relationships:
+        $ref: '#/definitions/ItemTypeRelationships'
+
+  ItemTypeRelationships:
+    type: object
+    properties:
+      fields:
+        type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/definitions/Relationship'
+      orderingField:
+        type: object
+        properties:
+          data:
+            $ref: '#/definitions/Relationship'
+      singletonItem:
+        type: object
+        properties:
+          data:
+            $ref: '#/definitions/Relationship'
+
+  # Field
+
+  Field:
+    type: object
+    required:
+    - type
+    - attributes
+    properties:
+      id:
+        type: string
+        readOnly: true
+        x-nullable: false
+      type:
+        type: string
+        enum: [field]
+        x-nullable: false
+      attributes:
+        type: object
+        required:
+        - label
+        - apiKey
+        - fieldType
+        - appearance
+        - validators
+        properties:
+          label:
+            type: string
+            x-nullable: false
+          apiKey:
+            type: string
+            x-nullable: false
+            minLength: 1
+            maxLength: 32
+          fieldType:
+            type: string
+            enum: [string]
+            x-nullable: false
+          hint:
+            type: string
+            x-nullable: false
+          localized:
+            type: boolean
+            x-nullable: false
+          position:
+            type: integer
+            format: int32
+            x-nullable: false
+          appearance:
+            type: object
+            x-nullable: false
+            properties:
+              type:
+                type: string
+                enum: [title, plain, markdown]
+                x-nullable: false
+          validators:
+            type: object
+            x-nullable: false
+            properties:
+              required:
+                type: object
+              unique:
+                type: object
+              length:
+                type: object
+                properties:
+                  min:
+                    type: string
+                    x-nullable: true
+                  max:
+                    type: string
+                    x-nullable: true
+                  eq:
+                    type: string
+                    x-nullable: true
+              format:
+                type: object
+                properties:
+                  predefinedPattern:
+                    type: string
+                    enum: [url, email]
+                    x-nullable: true
+                  customPattern:
+                    type: string
+                    x-nullable: true
+              enum:
+                type: object
+                required:
+                - values
+                properties:
+                  values:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: string
+      relationships:
+        $ref: '#/definitions/FieldRelationships'
+
+  FieldRelationships:
+    type: object
+    properties:
+      itemType:
+        type: object
+        properties:
+          data:
+            $ref: '#/definitions/Relationship'
+
+  # Item
+
+  Item:
+    type: object
+    required:
+    - type
+    - attributes
+    - relationships
+    properties:
+      id:
+        type: string
+        readOnly: true
+        x-nullable: false
+      type:
+        type: string
+        enum: [item]
+        x-nullable: false
+      attributes:
+        type: object
+        x-nullable: false
+        additionalProperties:
+          type: object
+      relationships:
+        $ref: '#/definitions/ItemRelationships'
+
+  ItemRelationships:
+    type: object
+    required:
+    - itemType
+    properties:
+      itemType:
+        type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/definitions/Relationship'
+      lastEditor:
+        type: object
+        properties:
+          data:
+            $ref: '#/definitions/Relationship'
+
+  #----------------------------
+  # Reusable requests/responses
+  #----------------------------
+
+  # Generic
+
+  Error:
+    type: object
+    required:
+      - code
+      - error
+    properties:
+      code:
+        type: integer
+        format: int32
+        x-nullable: false
+      error:
+        type: string
+        x-nullable: false
+
+  # Project
+
+  ProjectRequest:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Project'
+    required:
+    - data
+
+  ProjectResponse:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Project'
+
+  ProjectsResponse:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Project'
+
+  # Role
+
+  RoleRequest:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Role'
+    required:
+    - data
+
+  RoleResponse:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Role'
+
+  RolesResponse:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Role'
+
+  # User
+
+  UserRequest:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/User'
+    required:
+    - data
+
+  UserResponse:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/User'
+
+  UsersResponse:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/User'
+
+  # Item-type
+
+  ItemTypeRequest:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/ItemType'
+    required:
+    - data
+
+  ItemTypeResponse:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/ItemType'
+      included:
+        $ref: '#/definitions/ItemTypeIncluded'
+
+  ItemTypesResponse:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ItemType'
+
+  ItemTypeIncluded:
+    type: array
+    items:
+      $ref: '#/definitions/Field'
+
+  # Field
+
+  FieldRequest:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Field'
+    required:
+    - data
+
+  FieldResponse:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Field'
+
+  FieldsResponse:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Field'
+
+  # Item
+
+  ItemRequest:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Item'
+    required:
+    - data
+
+  ItemResponse:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Item'
+
+  ItemsResponse:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Item'
+      meta:
+        $ref: '#/definitions/ItemsResponseMeta'
+
+  ItemsResponseMeta:
+    type: object
+    properties:
+      totalCount:
+        type: integer
+        format: int32
