@@ -19,4 +19,3 @@ bin/
 .idea/
 vendor/
 glide.lock
-gen/

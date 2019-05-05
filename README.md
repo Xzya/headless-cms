@@ -67,7 +67,7 @@ You can find a dashboard for the project [here](https://github.com/Xzya/headless
 ## Built using
 
 - [Swagger](https://swagger.io/), API definition
-- [go-swagger](https://github.com/go-swagger/go-swagger), generate server stub based on swagger definition
+- [go-swagger 0.15.0](https://github.com/go-swagger/go-swagger/releases/tag/0.15.0), generate server stub based on swagger definition
 - [gorm](https://github.com/jinzhu/gorm), database operations
 
 ## License
